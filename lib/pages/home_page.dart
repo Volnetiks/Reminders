@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:reminders/pages/note_page.dart';
 import 'package:reminders/utils/hex_color.dart';
 
 import '../models/note_model.dart';
@@ -74,7 +75,11 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.white,
           child: Icon(Icons.add_rounded,
               color: HexColor.fromHex("#f7a243"), size: 40),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return const NotePage();
+            }));
+          },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: Padding(
