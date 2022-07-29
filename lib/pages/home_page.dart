@@ -46,61 +46,92 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        extendBody: true,
+        bottomNavigationBar: Opacity(
+          opacity: 0.95,
+          child: BottomAppBar(
+              color: Colors.white,
+              elevation: 0.1,
+              notchMargin: 10,
+              shape: const CircularNotchedRectangle(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.list, size: 35)),
+                    const SizedBox(height: 60.0),
+                    IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.search, size: 35)),
+                  ],
+                ),
+              )),
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.white,
+          child: Icon(Icons.add_rounded,
+              color: HexColor.fromHex("#f7a243"), size: 40),
+          onPressed: () {},
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 35,
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 35,
+              ),
+              const Align(
+                  alignment: Alignment.topRight,
+                  child: Icon(Icons.person, size: 60)),
+              Text("Reminders",
+                  style: TextStyle(
+                      color: HexColor.fromHex("#343a50"),
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold)),
+              const SizedBox(height: 15),
+              Text("Pinned",
+                  style: TextStyle(
+                      color: HexColor.fromHex("#bdbfc3"), fontSize: 15)),
+              SizedBox(
+                height: 190,
+                child: MasonryGridView.count(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 15,
+                  itemCount: 2,
+                  itemBuilder: (context, index) {
+                    return NoteWidget(
+                        title: titles[index],
+                        content: content[index],
+                        date: dates[index]);
+                  },
+                ),
+              ),
+              Text("Upcoming",
+                  style: TextStyle(
+                      color: HexColor.fromHex("#bdbfc3"), fontSize: 15)),
+              Expanded(
+                child: MasonryGridView.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 15,
+                    shrinkWrap: true,
+                    itemCount: 6,
+                    itemBuilder: (context, index) {
+                      return NoteWidget(
+                          title: titles[index + 2],
+                          content: content[index + 2],
+                          date: dates[index + 2]);
+                    }),
+              )
+            ],
           ),
-          const Align(
-              alignment: Alignment.topRight,
-              child: Icon(Icons.person, size: 60)),
-          Text("Reminders",
-              style: TextStyle(
-                  color: HexColor.fromHex("#343a50"),
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold)),
-          const SizedBox(height: 15),
-          Text("Pinned",
-              style:
-                  TextStyle(color: HexColor.fromHex("#bdbfc3"), fontSize: 15)),
-          SizedBox(
-            height: 190,
-            child: MasonryGridView.count(
-              crossAxisCount: 2,
-              mainAxisSpacing: 20,
-              crossAxisSpacing: 15,
-              itemCount: 2,
-              itemBuilder: (context, index) {
-                return NoteWidget(
-                    title: titles[index],
-                    content: content[index],
-                    date: dates[index]);
-              },
-            ),
-          ),
-          Text("Upcoming",
-              style:
-                  TextStyle(color: HexColor.fromHex("#bdbfc3"), fontSize: 15)),
-          Expanded(
-            child: MasonryGridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 15,
-                shrinkWrap: true,
-                itemCount: 6,
-                itemBuilder: (context, index) {
-                  return NoteWidget(
-                      title: titles[index + 2],
-                      content: content[index + 2],
-                      date: dates[index + 2]);
-                }),
-          )
-        ],
-      ),
-    ));
+        ));
   }
 }
