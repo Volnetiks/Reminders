@@ -63,29 +63,28 @@ class _HomePageState extends State<HomePage> {
                   color: HexColor.fromHex("#343a50"),
                   fontSize: 30,
                   fontWeight: FontWeight.bold)),
-          const SizedBox(height: 20),
+          const SizedBox(height: 15),
           Text("Pinned",
               style:
                   TextStyle(color: HexColor.fromHex("#bdbfc3"), fontSize: 15)),
-          const SizedBox(height: 5),
           SizedBox(
-            height: 200,
+            height: 190,
             child: MasonryGridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 15,
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  return NoteWidget(
-                      title: titles[index],
-                      content: content[index],
-                      date: dates[index]);
-                }),
+              crossAxisCount: 2,
+              mainAxisSpacing: 20,
+              crossAxisSpacing: 15,
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                return NoteWidget(
+                    title: titles[index],
+                    content: content[index],
+                    date: dates[index]);
+              },
+            ),
           ),
           Text("Upcoming",
               style:
                   TextStyle(color: HexColor.fromHex("#bdbfc3"), fontSize: 15)),
-          const SizedBox(height: 5),
           Expanded(
             child: MasonryGridView.count(
                 crossAxisCount: 2,
