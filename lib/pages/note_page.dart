@@ -13,46 +13,100 @@ class _NotePageState extends State<NotePage> {
   bool pinned = false;
   bool notificationsEnabled = false;
 
+  int indexChoosen = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: BottomAppBar(
-            color: Colors.white,
-            notchMargin: 10,
-            shape: const CircularNotchedRectangle(),
-            child: Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.square_rounded,
-                          color: HexColor.fromHex("#ffa447"), size: 50)),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.square_rounded,
-                          color: HexColor.fromHex("#7ecbff"), size: 50)),
-                  const SizedBox(height: 100.0),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.square_rounded,
-                          color: HexColor.fromHex("#ffa6c4"), size: 50)),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.square_rounded,
-                          color: HexColor.fromHex("#1eccc3"), size: 50)),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.square_rounded,
-                          color: HexColor.fromHex("#ffa3a3"), size: 50)),
-                ],
-              ),
-            )),
+        bottomNavigationBar: SizedBox(
+          height: 100,
+          child: BottomAppBar(
+              color: Colors.white,
+              notchMargin: 7,
+              shape: const CircularNotchedRectangle(),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () {
+                          setState(() {
+                            indexChoosen = 0;
+                          });
+                        },
+                        icon: Icon(
+                            indexChoosen == 0
+                                ? Icons.check_box_rounded
+                                : Icons.square_rounded,
+                            color: HexColor.fromHex("#ffa447"),
+                            size: 50)),
+                    IconButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () {
+                          setState(() {
+                            indexChoosen = 1;
+                          });
+                        },
+                        icon: Icon(
+                            indexChoosen == 1
+                                ? Icons.check_box_rounded
+                                : Icons.square_rounded,
+                            color: HexColor.fromHex("#7ecbff"),
+                            size: 50)),
+                    IconButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () {
+                          setState(() {
+                            indexChoosen = 2;
+                          });
+                        },
+                        icon: Icon(
+                            indexChoosen == 2
+                                ? Icons.check_box_rounded
+                                : Icons.square_rounded,
+                            color: HexColor.fromHex("#ffa6c4"),
+                            size: 50)),
+                    IconButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () {
+                          setState(() {
+                            indexChoosen = 3;
+                          });
+                        },
+                        icon: Icon(
+                            indexChoosen == 3
+                                ? Icons.check_box_rounded
+                                : Icons.square_rounded,
+                            color: HexColor.fromHex("#1eccc3"),
+                            size: 50)),
+                    IconButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () {
+                          setState(() {
+                            indexChoosen = 4;
+                          });
+                        },
+                        icon: Icon(
+                            indexChoosen == 4
+                                ? Icons.check_box_rounded
+                                : Icons.square_rounded,
+                            color: HexColor.fromHex("#ffa3a3"),
+                            size: 50)),
+                  ],
+                ),
+              )),
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.white,
-          child: Icon(Icons.add_rounded,
+          child: Icon(Icons.check_rounded,
               color: HexColor.fromHex("#f7a243"), size: 40),
           onPressed: () {},
         ),
