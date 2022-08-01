@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reminders/models/note.dart';
+import 'package:reminders/utils/date_utils.dart';
 
 import '../utils/hex_color.dart';
 
@@ -52,8 +53,7 @@ class _NoteWidgetState extends State<NoteWidget> {
                       borderRadius: const BorderRadius.all(Radius.circular(5))),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Text(DateFormat('E, d MMM, HH:mm')
-                        .format(widget.note.dueDate)),
+                    child: Text(widget.note.dueDate.formatNotesDate()),
                   ))
             ],
           ),
