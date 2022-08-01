@@ -16,13 +16,25 @@ extension DateUtils on DateTime {
     return today == DateTime(date.year, date.month, date.day);
   }
 
+  bool isSameWeek(DateTime dateTime) {
+    return ((int.parse(DateFormat("D").format(dateTime)) -
+                    dateTime.weekday +
+                    10) /
+                7)
+            .floor() ==
+        ((int.parse(DateFormat("D").format(this)) - dateTime.weekday + 10) / 7)
+            .floor();
+  }
+
   String formatNotesDate() {
     if (isToday()) {
       return 'Today, ${DateFormat.Hm().format(this)}';
     } else if (isTomorrow()) {
       return 'Tomorrow, ${DateFormat.Hm().format(this)}';
+    } else if (isSameWeek(DateTime.now())) {
+      return DateFormat("E, HH:mm").format(this);
     } else {
-      return DateFormat("d MMM, Hm").format(this);
+      return DateFormat("d MMM, HH:mm").format(this);
     }
   }
 }
