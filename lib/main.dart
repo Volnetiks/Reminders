@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:reminders/utils/date_utils.dart';
-
 import 'pages/home_page.dart';
 
 void main() {

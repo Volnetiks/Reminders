@@ -1,6 +1,15 @@
 const String notesTable = 'notes';
 
 class NoteFields {
+  static const List<String> values = [
+    id,
+    isPinned,
+    title,
+    content,
+    colorID,
+    dueDate
+  ];
+
   static const String id = "_id";
   static const String isPinned = "isPinned";
   static const String title = "title";
@@ -32,4 +41,28 @@ class Note {
         NoteFields.content: content,
         NoteFields.dueDate: dueDate.toIso8601String()
       };
+
+  static Note fromJSON(Map<String, Object?> json) => Note(
+      id: json[NoteFields.id] as int?,
+      title: json[NoteFields.title] as String,
+      content: json[NoteFields.content] as String,
+      dueDate: DateTime.parse(json[NoteFields.dueDate] as String),
+      colorID: json[NoteFields.colorID] as int,
+      isPinned: json[NoteFields.isPinned] == 1);
+
+  Note copy({
+    int? id,
+    bool? isPinned,
+    String? title,
+    String? content,
+    DateTime? dueDate,
+    int? colorID,
+  }) =>
+      Note(
+          id: id ?? this.id,
+          isPinned: isPinned ?? this.isPinned,
+          title: title ?? this.title,
+          content: content ?? this.content,
+          dueDate: dueDate ?? this.dueDate,
+          colorID: colorID ?? this.colorID);
 }

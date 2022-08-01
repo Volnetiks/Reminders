@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:reminders/models/note.dart';
 import 'package:reminders/utils/date_utils.dart';
 

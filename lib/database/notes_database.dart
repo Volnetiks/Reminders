@@ -40,9 +40,54 @@ CREATE TABLE $notesTable (
 ''');
   }
 
+  Future<Note> createNote(Note note) async {
+    final db = await instance.database;
+
+    final id = await db.insert(notesTable, note.toJSON());
+    return note.copy(id: id);
+  }
+
   Future close() async {
     final db = await instance.database;
 
     db.close();
+  }
+
+  Future<Note> readNote(int id) async {
+    final db = await instance.database;
+
+    final map = await db.query(notesTable,
+        columns: NoteFields.values,
+        where: '${NoteFields.id} = ?',
+        whereArgs: [id]);
+
+    if (map.isNotEmpty) {
+      return Note.fromJSON(map.first);
+    } else {
+      throw Exception("ID $id not found");
+    }
+  }
+
+  Future<List<Note>> readAllNotes() async {
+    final db = await instance.database;
+
+    const orderBy = '${NoteFields.dueDate} ASC';
+    final result = await db.query(notesTable, orderBy: orderBy);
+
+    return result.map((json) => Note.fromJSON(json)).toList();
+  }
+
+  Future<int> delete(int id) async {
+    final db = await instance.database;
+
+    return await db
+        .delete(notesTable, where: '${NoteFields.id} = ?', whereArgs: [id]);
+  }
+
+  Future<int> update(Note note) async {
+    final db = await instance.database;
+
+    return db.update(notesTable, note.toJSON(),
+        where: '${NoteFields.id} = ?', whereArgs: [note.id]);
   }
 }
