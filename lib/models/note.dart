@@ -7,7 +7,8 @@ class NoteFields {
     title,
     content,
     colorID,
-    dueDate
+    dueDate,
+    isDone
   ];
 
   static const String id = "_id";
@@ -16,6 +17,7 @@ class NoteFields {
   static const String content = "content";
   static const String colorID = "colorID";
   static const String dueDate = "dueDate";
+  static const String isDone = "isDone";
 }
 
 class Note {
@@ -25,6 +27,7 @@ class Note {
   final String content;
   final int colorID;
   final DateTime dueDate;
+  final bool isDone;
 
   const Note(
       {this.id,
@@ -32,14 +35,16 @@ class Note {
       required this.title,
       required this.content,
       required this.colorID,
-      required this.dueDate});
+      required this.dueDate,
+      required this.isDone});
 
   Map<String, Object?> toJSON() => {
         NoteFields.id: id,
         NoteFields.isPinned: isPinned ? 1 : 0,
         NoteFields.title: title,
         NoteFields.content: content,
-        NoteFields.dueDate: dueDate.toIso8601String()
+        NoteFields.dueDate: dueDate.toIso8601String(),
+        NoteFields.isDone: isDone ? 1 : 0
       };
 
   static Note fromJSON(Map<String, Object?> json) => Note(
@@ -48,21 +53,23 @@ class Note {
       content: json[NoteFields.content] as String,
       dueDate: DateTime.parse(json[NoteFields.dueDate] as String),
       colorID: json[NoteFields.colorID] as int,
-      isPinned: json[NoteFields.isPinned] == 1);
+      isPinned: json[NoteFields.isPinned] == 1,
+      isDone: json[NoteFields.isDone] == 1);
 
-  Note copy({
-    int? id,
-    bool? isPinned,
-    String? title,
-    String? content,
-    DateTime? dueDate,
-    int? colorID,
-  }) =>
+  Note copy(
+          {int? id,
+          bool? isPinned,
+          String? title,
+          String? content,
+          DateTime? dueDate,
+          int? colorID,
+          bool? isDone}) =>
       Note(
           id: id ?? this.id,
           isPinned: isPinned ?? this.isPinned,
           title: title ?? this.title,
           content: content ?? this.content,
           dueDate: dueDate ?? this.dueDate,
-          colorID: colorID ?? this.colorID);
+          colorID: colorID ?? this.colorID,
+          isDone: isDone ?? this.isDone);
 }

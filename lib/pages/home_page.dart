@@ -4,6 +4,7 @@ import 'package:reminders/models/note.dart';
 import 'package:reminders/pages/note_page.dart';
 import 'package:reminders/utils/hex_color.dart';
 
+import '../database/notes_database.dart';
 import '../models/note_model.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,6 +15,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+
+    refreshNotes();
+  }
+
+  Future refreshNotes() async {
+    print(await NotesDatabase.instance.readAllNotes());
+  }
+
   List<Note> pinnedNotes = [
     Note(
         colorID: 1,
@@ -21,14 +33,16 @@ class _HomePageState extends State<HomePage> {
         title: "Coffee",
         isPinned: true,
         dueDate: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, 16, 30)),
+            DateTime.now().day, 16, 30),
+        isDone: false),
     Note(
         colorID: 0,
         content: "Call instructor",
         title: "Certification",
         isPinned: true,
         dueDate: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, 20, 45)),
+            DateTime.now().day, 20, 45),
+        isDone: false),
   ];
 
   List<Note> notes = [
@@ -38,38 +52,44 @@ class _HomePageState extends State<HomePage> {
         title: "Team Meeting",
         isPinned: false,
         dueDate: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day + 1, 11, 15)),
+            DateTime.now().day + 1, 11, 15),
+        isDone: false),
     Note(
         colorID: 3,
         content: "",
         title: "Birthday Party Preparations",
         isPinned: false,
         dueDate: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day + 3, 18, 00)),
+            DateTime.now().day + 3, 18, 00),
+        isDone: false),
     Note(
         colorID: 3,
         content: "Buy tickets for the family vacations",
         title: "",
         isPinned: false,
-        dueDate: DateTime(DateTime.now().year, DateTime.september, 4, 15, 00)),
+        dueDate: DateTime(DateTime.now().year, DateTime.september, 4, 15, 00),
+        isDone: false),
     Note(
         colorID: 4,
         content: "Health check up.",
         title: "Appointment",
         isPinned: false,
-        dueDate: DateTime(DateTime.now().year, DateTime.september, 5, 9, 00)),
+        dueDate: DateTime(DateTime.now().year, DateTime.september, 5, 9, 00),
+        isDone: false),
     Note(
         colorID: 0,
         content: "",
         title: "Grocery",
         isPinned: false,
-        dueDate: DateTime(DateTime.now().year, DateTime.september, 9, 4, 00)),
+        dueDate: DateTime(DateTime.now().year, DateTime.september, 9, 4, 00),
+        isDone: false),
     Note(
         colorID: 1,
         content: "Send best wishes.",
         title: "Anniversary",
         isPinned: false,
-        dueDate: DateTime(DateTime.now().year, DateTime.november, 11, 18, 00)),
+        dueDate: DateTime(DateTime.now().year, DateTime.november, 11, 18, 00),
+        isDone: false),
   ];
 
   @override

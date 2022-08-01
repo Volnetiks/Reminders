@@ -17,9 +17,16 @@ class NotesDatabase {
     return _database!;
   }
 
-  Future<Database> initDatabase(String dbPath) async {
+  Future<void> deleteDatabase(String filePath) async {
     final dbPath = await getDatabasesPath();
-    final path = join(dbPath, dbPath);
+    final path = join(dbPath, filePath);
+
+    await deleteDatabase(path);
+  }
+
+  Future<Database> initDatabase(String filePath) async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, filePath);
 
     return await openDatabase(path, version: 1, onCreate: createDB);
   }
@@ -32,10 +39,11 @@ class NotesDatabase {
     await db.execute('''
 CREATE TABLE $notesTable (
   ${NoteFields.id} $idType,
-  ${NoteFields.isPinned} $boolType
+  ${NoteFields.isPinned} $boolType,
   ${NoteFields.title} $textType,
   ${NoteFields.content} $textType,
-  ${NoteFields.dueDate} $textType
+  ${NoteFields.dueDate} $textType,
+  ${NoteFields.isDone} $boolType
 )
 ''');
   }
