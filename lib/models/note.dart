@@ -1,6 +1,13 @@
 const String notesTable = 'notes';
 
-class NoteFields {}
+class NoteFields {
+  static const String id = "_id";
+  static const String isPinned = "isPinned";
+  static const String title = "title";
+  static const String content = "content";
+  static const String colorID = "colorID";
+  static const String duedate = "dueDate";
+}
 
 class Note {
   final int? id;
