@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:reminders/models/note.dart';
 import 'package:reminders/pages/note_page.dart';
 import 'package:reminders/utils/hex_color.dart';
 
@@ -13,35 +14,62 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> titles = [
-    "Coffee",
-    "Certification",
-    "Team Meeting",
-    "Birthday Party Preparations",
-    "",
-    "Appointment",
-    "Grocery",
-    "Anniversary"
+  List<Note> pinnedNotes = [
+    Note(
+        colorID: 1,
+        content: "Prepare hot coffee for friends.",
+        title: "Coffee",
+        isPinned: true,
+        dueDate: DateTime(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day, 16, 30)),
+    Note(
+        colorID: 0,
+        content: "Call instructor",
+        title: "Certification",
+        isPinned: true,
+        dueDate: DateTime(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day, 20, 45)),
   ];
-  List<String> content = [
-    "Prepare hot coffee for friends.",
-    "Call instructor",
-    "Planning sprint log for next product design update",
-    "",
-    "Buy tickets for the family vacations",
-    "Health check up.",
-    "",
-    "Send best wishes."
-  ];
-  List<String> dates = [
-    "Today, 4:30",
-    "Today, 8:45",
-    "Tomorrow, 11:15",
-    "Sat, 6:00",
-    "4 Sep, 3:00",
-    "5 Sep, 5:00",
-    "9 Sep, 4:00",
-    "11 Nov, 9:00"
+
+  List<Note> notes = [
+    Note(
+        colorID: 2,
+        content: "Planning sprint log for next product design update",
+        title: "Team Meeting",
+        isPinned: false,
+        dueDate: DateTime(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day + 1, 11, 15)),
+    Note(
+        colorID: 3,
+        content: "",
+        title: "Birthday Party Preparations",
+        isPinned: false,
+        dueDate: DateTime(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day + 3, 18, 00)),
+    Note(
+        colorID: 3,
+        content: "Buy tickets for the family vacations",
+        title: "",
+        isPinned: false,
+        dueDate: DateTime(DateTime.now().year, DateTime.september, 4, 15, 00)),
+    Note(
+        colorID: 4,
+        content: "Health check up.",
+        title: "Appointment",
+        isPinned: false,
+        dueDate: DateTime(DateTime.now().year, DateTime.september, 5, 9, 00)),
+    Note(
+        colorID: 0,
+        content: "",
+        title: "Grocery",
+        isPinned: false,
+        dueDate: DateTime(DateTime.now().year, DateTime.september, 9, 4, 00)),
+    Note(
+        colorID: 1,
+        content: "Send best wishes.",
+        title: "Anniversary",
+        isPinned: false,
+        dueDate: DateTime(DateTime.now().year, DateTime.november, 11, 18, 00)),
   ];
 
   @override
@@ -111,10 +139,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisSpacing: 15,
                   itemCount: 2,
                   itemBuilder: (context, index) {
-                    return NoteWidget(
-                        title: titles[index],
-                        content: content[index],
-                        date: dates[index]);
+                    return NoteWidget(note: pinnedNotes[index]);
                   },
                 ),
               ),
@@ -129,10 +154,7 @@ class _HomePageState extends State<HomePage> {
                     shrinkWrap: true,
                     itemCount: 6,
                     itemBuilder: (context, index) {
-                      return NoteWidget(
-                          title: titles[index + 2],
-                          content: content[index + 2],
-                          date: dates[index + 2]);
+                      return NoteWidget(note: notes[index]);
                     }),
               )
             ],

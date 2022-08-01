@@ -1,19 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:reminders/models/note.dart';
 
 import '../utils/hex_color.dart';
 
 class NoteWidget extends StatefulWidget {
-  const NoteWidget(
-      {Key? key,
-      required this.title,
-      required this.content,
-      required this.date})
-      : super(key: key);
-  final String title;
-  final String content;
-  final String date;
+  const NoteWidget({Key? key, required this.note}) : super(key: key);
+
+  final Note note;
 
   @override
   State<NoteWidget> createState() => _NoteWidgetState();
@@ -32,24 +28,25 @@ class _NoteWidgetState extends State<NoteWidget> {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-            color: colors[Random().nextInt(colors.length)],
+            color: colors[widget.note.colorID],
             borderRadius: const BorderRadius.all(Radius.circular(25))),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              widget.title == ""
+              widget.note.title == ""
                   ? Container(height: 0)
-                  : Text(widget.title,
+                  : Text(widget.note.title,
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.bold)),
-              widget.title == ""
+              widget.note.title == ""
                   ? Container(height: 0)
                   : const SizedBox(height: 5),
-              widget.content == ""
+              widget.note.content == ""
                   ? Container(height: 0)
-                  : Text(widget.content, style: const TextStyle(fontSize: 15)),
+                  : Text(widget.note.content,
+                      style: const TextStyle(fontSize: 15)),
               const SizedBox(height: 15),
               Container(
                   decoration: BoxDecoration(
@@ -57,7 +54,8 @@ class _NoteWidgetState extends State<NoteWidget> {
                       borderRadius: const BorderRadius.all(Radius.circular(5))),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Text(widget.date),
+                    child: Text(DateFormat('E, d MMM, HH:mm')
+                        .format(widget.note.dueDate)),
                   ))
             ],
           ),
