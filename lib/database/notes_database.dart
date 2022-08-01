@@ -36,7 +36,7 @@ CREATE TABLE $notesTable (
   ${NoteFields.isPinned} $boolType
   ${NoteFields.title} $textType,
   ${NoteFields.content} $textType,
-  ${NoteFields.duedate} $textType
+  ${NoteFields.dueDate} $textType
 )
 ''');
   }

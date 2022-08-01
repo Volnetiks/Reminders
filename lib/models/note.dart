@@ -6,7 +6,7 @@ class NoteFields {
   static const String title = "title";
   static const String content = "content";
   static const String colorID = "colorID";
-  static const String duedate = "dueDate";
+  static const String dueDate = "dueDate";
 }
 
 class Note {
@@ -24,4 +24,12 @@ class Note {
       required this.content,
       required this.colorID,
       required this.dueDate});
+
+  Map<String, Object?> toJSON() => {
+        NoteFields.id: id,
+        NoteFields.isPinned: isPinned ? 1 : 0,
+        NoteFields.title: title,
+        NoteFields.content: content,
+        NoteFields.dueDate: dueDate.toIso8601String()
+      };
 }
