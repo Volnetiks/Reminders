@@ -108,7 +108,7 @@ class _NotePageState extends State<NotePage> {
           backgroundColor: Colors.white,
           child: Icon(Icons.check_rounded,
               color: HexColor.fromHex("#f7a243"), size: 40),
-          onPressed: () {},
+          onPressed: () async {},
         ),
         appBar: AppBar(
           backgroundColor: Colors.transparent,

@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future refreshNotes() async {
+    // NotesDatabase.instance.deleteDatabase('notes.db');
     print(await NotesDatabase.instance.readAllNotes());
   }
 
@@ -34,7 +35,8 @@ class _HomePageState extends State<HomePage> {
         isPinned: true,
         dueDate: DateTime(DateTime.now().year, DateTime.now().month,
             DateTime.now().day, 16, 30),
-        isDone: false),
+        isDone: false,
+        notifications: false),
     Note(
         colorID: 0,
         content: "Call instructor",
@@ -42,7 +44,8 @@ class _HomePageState extends State<HomePage> {
         isPinned: true,
         dueDate: DateTime(DateTime.now().year, DateTime.now().month,
             DateTime.now().day, 20, 45),
-        isDone: false),
+        isDone: false,
+        notifications: false),
   ];
 
   List<Note> notes = [
@@ -53,7 +56,8 @@ class _HomePageState extends State<HomePage> {
         isPinned: false,
         dueDate: DateTime(DateTime.now().year, DateTime.now().month,
             DateTime.now().day + 1, 11, 15),
-        isDone: false),
+        isDone: false,
+        notifications: false),
     Note(
         colorID: 3,
         content: "",
@@ -61,35 +65,40 @@ class _HomePageState extends State<HomePage> {
         isPinned: false,
         dueDate: DateTime(DateTime.now().year, DateTime.now().month,
             DateTime.now().day + 3, 18, 00),
-        isDone: false),
+        isDone: false,
+        notifications: false),
     Note(
         colorID: 3,
         content: "Buy tickets for the family vacations",
         title: "",
         isPinned: false,
         dueDate: DateTime(DateTime.now().year, DateTime.september, 4, 15, 00),
-        isDone: false),
+        isDone: false,
+        notifications: false),
     Note(
         colorID: 4,
         content: "Health check up.",
         title: "Appointment",
         isPinned: false,
         dueDate: DateTime(DateTime.now().year, DateTime.september, 5, 9, 00),
-        isDone: false),
+        isDone: false,
+        notifications: false),
     Note(
         colorID: 0,
         content: "",
         title: "Grocery",
         isPinned: false,
         dueDate: DateTime(DateTime.now().year, DateTime.september, 9, 4, 00),
-        isDone: false),
+        isDone: false,
+        notifications: false),
     Note(
         colorID: 1,
         content: "Send best wishes.",
         title: "Anniversary",
         isPinned: false,
         dueDate: DateTime(DateTime.now().year, DateTime.november, 11, 18, 00),
-        isDone: false),
+        isDone: false,
+        notifications: false),
   ];
 
   @override

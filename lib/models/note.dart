@@ -8,7 +8,8 @@ class NoteFields {
     content,
     colorID,
     dueDate,
-    isDone
+    isDone,
+    notifications
   ];
 
   static const String id = "_id";
@@ -18,6 +19,7 @@ class NoteFields {
   static const String colorID = "colorID";
   static const String dueDate = "dueDate";
   static const String isDone = "isDone";
+  static const String notifications = "notifications";
 }
 
 class Note {
@@ -28,6 +30,7 @@ class Note {
   final int colorID;
   final DateTime dueDate;
   final bool isDone;
+  final bool notifications;
 
   const Note(
       {this.id,
@@ -36,7 +39,8 @@ class Note {
       required this.content,
       required this.colorID,
       required this.dueDate,
-      required this.isDone});
+      required this.isDone,
+      required this.notifications});
 
   Map<String, Object?> toJSON() => {
         NoteFields.id: id,
@@ -44,7 +48,8 @@ class Note {
         NoteFields.title: title,
         NoteFields.content: content,
         NoteFields.dueDate: dueDate.toIso8601String(),
-        NoteFields.isDone: isDone ? 1 : 0
+        NoteFields.isDone: isDone ? 1 : 0,
+        NoteFields.notifications: notifications ? 1 : 0
       };
 
   static Note fromJSON(Map<String, Object?> json) => Note(
@@ -54,7 +59,8 @@ class Note {
       dueDate: DateTime.parse(json[NoteFields.dueDate] as String),
       colorID: json[NoteFields.colorID] as int,
       isPinned: json[NoteFields.isPinned] == 1,
-      isDone: json[NoteFields.isDone] == 1);
+      isDone: json[NoteFields.isDone] == 1,
+      notifications: json[NoteFields.notifications] == 1);
 
   Note copy(
           {int? id,
@@ -63,7 +69,8 @@ class Note {
           String? content,
           DateTime? dueDate,
           int? colorID,
-          bool? isDone}) =>
+          bool? isDone,
+          bool? notifications}) =>
       Note(
           id: id ?? this.id,
           isPinned: isPinned ?? this.isPinned,
@@ -71,5 +78,6 @@ class Note {
           content: content ?? this.content,
           dueDate: dueDate ?? this.dueDate,
           colorID: colorID ?? this.colorID,
-          isDone: isDone ?? this.isDone);
+          isDone: isDone ?? this.isDone,
+          notifications: notifications ?? this.notifications);
 }

@@ -43,7 +43,8 @@ CREATE TABLE $notesTable (
   ${NoteFields.title} $textType,
   ${NoteFields.content} $textType,
   ${NoteFields.dueDate} $textType,
-  ${NoteFields.isDone} $boolType
+  ${NoteFields.isDone} $boolType,
+  ${NoteFields.notifications} $boolType,
 )
 ''');
   }
