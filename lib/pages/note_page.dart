@@ -1,6 +1,11 @@
+import 'package:awesome_calendar/awesome_calendar.dart';
 import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:flutter/material.dart';
+import 'package:reminders/pages/home_page.dart';
+import 'package:reminders/utils/date_utils.dart';
 
+import '../database/notes_database.dart';
+import '../models/note.dart';
 import '../utils/hex_color.dart';
 
 class NotePage extends StatefulWidget {
@@ -19,7 +24,10 @@ class _NotePageState extends State<NotePage> {
   final timeController = TextEditingController();
   final dayController = TextEditingController();
 
-  int indexChoosen = 0;
+  DateTime? day;
+  TimeOfDay? time;
+
+  int colorID = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +48,11 @@ class _NotePageState extends State<NotePage> {
                         highlightColor: Colors.transparent,
                         onPressed: () {
                           setState(() {
-                            indexChoosen = 0;
+                            colorID = 0;
                           });
                         },
                         icon: Icon(
-                            indexChoosen == 0
+                            colorID == 0
                                 ? Icons.check_box_rounded
                                 : Icons.square_rounded,
                             color: HexColor.fromHex("#ffa447"),
@@ -54,11 +62,11 @@ class _NotePageState extends State<NotePage> {
                         highlightColor: Colors.transparent,
                         onPressed: () {
                           setState(() {
-                            indexChoosen = 1;
+                            colorID = 1;
                           });
                         },
                         icon: Icon(
-                            indexChoosen == 1
+                            colorID == 1
                                 ? Icons.check_box_rounded
                                 : Icons.square_rounded,
                             color: HexColor.fromHex("#7ecbff"),
@@ -68,11 +76,11 @@ class _NotePageState extends State<NotePage> {
                         highlightColor: Colors.transparent,
                         onPressed: () {
                           setState(() {
-                            indexChoosen = 2;
+                            colorID = 2;
                           });
                         },
                         icon: Icon(
-                            indexChoosen == 2
+                            colorID == 2
                                 ? Icons.check_box_rounded
                                 : Icons.square_rounded,
                             color: HexColor.fromHex("#ffa6c4"),
@@ -82,11 +90,11 @@ class _NotePageState extends State<NotePage> {
                         highlightColor: Colors.transparent,
                         onPressed: () {
                           setState(() {
-                            indexChoosen = 3;
+                            colorID = 3;
                           });
                         },
                         icon: Icon(
-                            indexChoosen == 3
+                            colorID == 3
                                 ? Icons.check_box_rounded
                                 : Icons.square_rounded,
                             color: HexColor.fromHex("#1eccc3"),
@@ -96,11 +104,11 @@ class _NotePageState extends State<NotePage> {
                         highlightColor: Colors.transparent,
                         onPressed: () {
                           setState(() {
-                            indexChoosen = 4;
+                            colorID = 4;
                           });
                         },
                         icon: Icon(
-                            indexChoosen == 4
+                            colorID == 4
                                 ? Icons.check_box_rounded
                                 : Icons.square_rounded,
                             color: HexColor.fromHex("#ffa3a3"),
@@ -116,7 +124,26 @@ class _NotePageState extends State<NotePage> {
               color: HexColor.fromHex("#f7a243"), size: 40),
           onPressed: () async {
             if (titleController.text.isNotEmpty ||
-                contentController.text.isNotEmpty) {}
+                contentController.text.isNotEmpty) {
+              if (day != null && time != null) {
+                NotesDatabase.instance.createNote(Note(
+                    title: titleController.text.isNotEmpty
+                        ? titleController.text
+                        : "",
+                    content: contentController.text.isNotEmpty
+                        ? contentController.text
+                        : "",
+                    colorID: colorID,
+                    dueDate: DateTime(day!.year, day!.month, day!.day,
+                        time!.hour, time!.minute),
+                    isDone: false,
+                    isPinned: pinned,
+                    notifications: notificationsEnabled));
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => const HomePage()),
+                    (Route<dynamic> route) => false);
+              }
+            }
           },
         ),
         appBar: AppBar(
@@ -190,7 +217,29 @@ class _NotePageState extends State<NotePage> {
                                         suffixIcon: IconButton(
                                           splashColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
-                                          onPressed: () {},
+                                          onPressed: () async {
+                                            final DateTime? picked =
+                                                await showDialog<DateTime>(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AwesomeCalendarDialog(
+                                                  startDate: DateTime.now(),
+                                                  selectionMode:
+                                                      SelectionMode.single,
+                                                  canToggleRangeSelection:
+                                                      false,
+                                                );
+                                              },
+                                            );
+
+                                            setState(() {
+                                              if (picked != null) {
+                                                day = picked;
+                                                dayController.text =
+                                                    picked.formatDatePicker();
+                                              }
+                                            });
+                                          },
                                           icon:
                                               const Icon(Icons.calendar_month),
                                         ),
@@ -231,6 +280,7 @@ class _NotePageState extends State<NotePage> {
                                                                     .text =
                                                                 value.format(
                                                                     context);
+                                                            time = value;
                                                           })
                                                         }));
                                           },
@@ -256,7 +306,13 @@ class _NotePageState extends State<NotePage> {
                                         primary: Colors.white,
                                         onPrimary: Colors.white,
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        setState(() {
+                                          day = null;
+                                          time = null;
+                                        });
+                                        Navigator.pop(context);
+                                      },
                                       child: const Text("Cancel",
                                           style:
                                               TextStyle(color: Colors.black))),
@@ -272,7 +328,9 @@ class _NotePageState extends State<NotePage> {
                                           elevation: 0,
                                           primary: HexColor.fromHex("#ffa447"),
                                           onPrimary: Colors.black),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
                                       child: const Text("Save")),
                                 ),
                               ],

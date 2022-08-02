@@ -22,8 +22,7 @@ extension DateUtils on DateTime {
                     10) /
                 7)
             .floor() ==
-        ((int.parse(DateFormat("D").format(this)) - dateTime.weekday + 10) / 7)
-            .floor();
+        ((int.parse(DateFormat("D").format(this)) - weekday + 10) / 7).floor();
   }
 
   String formatNotesDate() {
@@ -35,6 +34,18 @@ extension DateUtils on DateTime {
       return DateFormat("E, HH:mm").format(this);
     } else {
       return DateFormat("d MMM, HH:mm").format(this);
+    }
+  }
+
+  String formatDatePicker() {
+    if (isToday()) {
+      return 'Today';
+    } else if (isTomorrow()) {
+      return 'Tomorrow';
+    } else if (isSameWeek(DateTime.now())) {
+      return DateFormat("EEEE").format(this);
+    } else {
+      return DateFormat("d MMM").format(this);
     }
   }
 }

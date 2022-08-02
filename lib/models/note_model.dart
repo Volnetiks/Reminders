@@ -15,8 +15,8 @@ class NoteWidget extends StatefulWidget {
 
 class _NoteWidgetState extends State<NoteWidget> {
   List<Color> colors = [
-    HexColor.fromHex("#7ecbff"),
     HexColor.fromHex("#ffa447"),
+    HexColor.fromHex("#7ecbff"),
     HexColor.fromHex("#ffa6c4"),
     HexColor.fromHex("#1eccc3"),
     HexColor.fromHex("#ffa3a3")

@@ -15,6 +15,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late List<Note> pinnedNotes;
+  late List<Note> notes;
+
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
@@ -23,83 +28,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future refreshNotes() async {
-    // NotesDatabase.instance.deleteDatabase('notes.db');
-    print(await NotesDatabase.instance.readAllNotes());
+    notes = await NotesDatabase.instance.readNonPinnedNotes();
+    pinnedNotes = await NotesDatabase.instance.readPinnedNotes();
+
+    setState(() {
+      isLoading = false;
+    });
   }
-
-  List<Note> pinnedNotes = [
-    Note(
-        colorID: 1,
-        content: "Prepare hot coffee for friends.",
-        title: "Coffee",
-        isPinned: true,
-        dueDate: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, 16, 30),
-        isDone: false,
-        notifications: false),
-    Note(
-        colorID: 0,
-        content: "Call instructor",
-        title: "Certification",
-        isPinned: true,
-        dueDate: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, 20, 45),
-        isDone: false,
-        notifications: false),
-  ];
-
-  List<Note> notes = [
-    Note(
-        colorID: 2,
-        content: "Planning sprint log for next product design update",
-        title: "Team Meeting",
-        isPinned: false,
-        dueDate: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day + 1, 11, 15),
-        isDone: false,
-        notifications: false),
-    Note(
-        colorID: 3,
-        content: "",
-        title: "Birthday Party Preparations",
-        isPinned: false,
-        dueDate: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day + 3, 18, 00),
-        isDone: false,
-        notifications: false),
-    Note(
-        colorID: 3,
-        content: "Buy tickets for the family vacations",
-        title: "",
-        isPinned: false,
-        dueDate: DateTime(DateTime.now().year, DateTime.september, 4, 15, 00),
-        isDone: false,
-        notifications: false),
-    Note(
-        colorID: 4,
-        content: "Health check up.",
-        title: "Appointment",
-        isPinned: false,
-        dueDate: DateTime(DateTime.now().year, DateTime.september, 5, 9, 00),
-        isDone: false,
-        notifications: false),
-    Note(
-        colorID: 0,
-        content: "",
-        title: "Grocery",
-        isPinned: false,
-        dueDate: DateTime(DateTime.now().year, DateTime.september, 9, 4, 00),
-        isDone: false,
-        notifications: false),
-    Note(
-        colorID: 1,
-        content: "Send best wishes.",
-        title: "Anniversary",
-        isPinned: false,
-        dueDate: DateTime(DateTime.now().year, DateTime.november, 11, 18, 00),
-        isDone: false,
-        notifications: false),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -139,55 +74,74 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 35,
-              ),
-              const Align(
-                  alignment: Alignment.topRight,
-                  child: Icon(Icons.person, size: 60)),
-              Text("Reminders",
-                  style: TextStyle(
-                      color: HexColor.fromHex("#343a50"),
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold)),
-              const SizedBox(height: 15),
-              Text("Pinned",
-                  style: TextStyle(
-                      color: HexColor.fromHex("#bdbfc3"), fontSize: 15)),
-              SizedBox(
-                height: 190,
-                child: MasonryGridView.count(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 15,
-                  itemCount: 2,
-                  itemBuilder: (context, index) {
-                    return NoteWidget(note: pinnedNotes[index]);
-                  },
-                ),
-              ),
-              Text("Upcoming",
-                  style: TextStyle(
-                      color: HexColor.fromHex("#bdbfc3"), fontSize: 15)),
-              Expanded(
-                child: MasonryGridView.count(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 15,
-                    shrinkWrap: true,
-                    itemCount: 6,
-                    itemBuilder: (context, index) {
-                      return NoteWidget(note: notes[index]);
-                    }),
-              )
-            ],
-          ),
-        ));
+        body: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : notes.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No Notes',
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 35,
+                        ),
+                        const Align(
+                            alignment: Alignment.topRight,
+                            child: Icon(Icons.person, size: 60)),
+                        Text("Reminders",
+                            style: TextStyle(
+                                color: HexColor.fromHex("#343a50"),
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 15),
+                        pinnedNotes.isEmpty
+                            ? Container()
+                            : Text("Pinned",
+                                style: TextStyle(
+                                    color: HexColor.fromHex("#bdbfc3"),
+                                    fontSize: 15)),
+                        pinnedNotes.isEmpty
+                            ? Container()
+                            : SizedBox(
+                                height: 190,
+                                child: MasonryGridView.count(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 20,
+                                  crossAxisSpacing: 15,
+                                  itemCount: pinnedNotes.length,
+                                  itemBuilder: (context, index) {
+                                    return NoteWidget(note: pinnedNotes[index]);
+                                  },
+                                ),
+                              ),
+                        notes.isEmpty
+                            ? Container()
+                            : Text("Upcoming",
+                                style: TextStyle(
+                                    color: HexColor.fromHex("#bdbfc3"),
+                                    fontSize: 15)),
+                        notes.isEmpty
+                            ? Container()
+                            : Expanded(
+                                child: MasonryGridView.count(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 20,
+                                    crossAxisSpacing: 15,
+                                    shrinkWrap: true,
+                                    itemCount: notes.length,
+                                    itemBuilder: (context, index) {
+                                      return NoteWidget(note: notes[index]);
+                                    }),
+                              )
+                      ],
+                    ),
+                  ));
   }
 }

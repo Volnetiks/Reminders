@@ -17,7 +17,7 @@ class NotesDatabase {
     return _database!;
   }
 
-  Future<void> deleteDatabase(String filePath) async {
+  Future<void> deleteDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
@@ -35,16 +35,18 @@ class NotesDatabase {
     const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     const textType = 'TEXT NOT NULL';
     const boolType = 'BOOLEAN NOT NULL';
+    const integerType = 'INTEGER NOT NULL';
 
     await db.execute('''
 CREATE TABLE $notesTable (
   ${NoteFields.id} $idType,
   ${NoteFields.isPinned} $boolType,
   ${NoteFields.title} $textType,
+  ${NoteFields.colorID} $integerType,
   ${NoteFields.content} $textType,
   ${NoteFields.dueDate} $textType,
   ${NoteFields.isDone} $boolType,
-  ${NoteFields.notifications} $boolType,
+  ${NoteFields.notifications} $boolType
 )
 ''');
   }
@@ -77,11 +79,22 @@ CREATE TABLE $notesTable (
     }
   }
 
-  Future<List<Note>> readAllNotes() async {
+  Future<List<Note>> readNonPinnedNotes() async {
     final db = await instance.database;
 
     const orderBy = '${NoteFields.dueDate} ASC';
-    final result = await db.query(notesTable, orderBy: orderBy);
+    final result = await db.query(notesTable,
+        orderBy: orderBy, where: '${NoteFields.isPinned} = ?', whereArgs: [0]);
+
+    return result.map((json) => Note.fromJSON(json)).toList();
+  }
+
+  Future<List<Note>> readPinnedNotes() async {
+    final db = await instance.database;
+
+    const orderBy = '${NoteFields.dueDate} ASC';
+    final result = await db.query(notesTable,
+        orderBy: orderBy, where: '${NoteFields.isPinned} = ?', whereArgs: [1]);
 
     return result.map((json) => Note.fromJSON(json)).toList();
   }

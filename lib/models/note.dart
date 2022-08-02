@@ -46,6 +46,7 @@ class Note {
         NoteFields.id: id,
         NoteFields.isPinned: isPinned ? 1 : 0,
         NoteFields.title: title,
+        NoteFields.colorID: colorID,
         NoteFields.content: content,
         NoteFields.dueDate: dueDate.toIso8601String(),
         NoteFields.isDone: isDone ? 1 : 0,
