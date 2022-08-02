@@ -13,6 +13,9 @@ class _NotePageState extends State<NotePage> {
   bool pinned = false;
   bool notificationsEnabled = false;
 
+  final titleController = TextEditingController();
+  final contentController = TextEditingController();
+
   int indexChoosen = 0;
 
   @override
@@ -108,7 +111,10 @@ class _NotePageState extends State<NotePage> {
           backgroundColor: Colors.white,
           child: Icon(Icons.check_rounded,
               color: HexColor.fromHex("#f7a243"), size: 40),
-          onPressed: () async {},
+          onPressed: () async {
+            if (titleController.text.isNotEmpty ||
+                contentController.text.isNotEmpty) {}
+          },
         ),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -151,8 +157,109 @@ class _NotePageState extends State<NotePage> {
             IconButton(
               visualDensity:
                   const VisualDensity(horizontal: -4.0, vertical: -4.0),
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               icon: const Icon(Icons.access_time, color: Colors.black),
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          backgroundColor: Colors.white,
+                          title: const Text('When to remind?'),
+                          actions: <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: HexColor.fromHex("#edf1f3"),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10))),
+                                child: TextField(
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        errorBorder: InputBorder.none,
+                                        disabledBorder: InputBorder.none,
+                                        suffixIcon: IconButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onPressed: () {},
+                                          icon:
+                                              const Icon(Icons.calendar_month),
+                                        ),
+                                        hintText: "Day",
+                                        contentPadding:
+                                            const EdgeInsets.all(15))),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: HexColor.fromHex("#edf1f3"),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10))),
+                                child: TextField(
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        errorBorder: InputBorder.none,
+                                        disabledBorder: InputBorder.none,
+                                        suffixIcon: IconButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onPressed: () {},
+                                          icon: const Icon(Icons.access_time),
+                                        ),
+                                        hintText: "Time",
+                                        contentPadding:
+                                            const EdgeInsets.all(15))),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                SizedBox(
+                                  width: 80,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        elevation: 0,
+                                        primary: Colors.white,
+                                        onPrimary: Colors.white,
+                                      ),
+                                      onPressed: () {},
+                                      child: const Text("Cancel",
+                                          style:
+                                              TextStyle(color: Colors.black))),
+                                ),
+                                const SizedBox(width: 20),
+                                SizedBox(
+                                  width: 80,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          elevation: 0,
+                                          primary: HexColor.fromHex("#ffa447"),
+                                          onPrimary: Colors.black),
+                                      onPressed: () {},
+                                      child: const Text("Save")),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ));
+              },
             )
           ],
         ),
@@ -161,6 +268,7 @@ class _NotePageState extends State<NotePage> {
           child: Column(
             children: [
               TextField(
+                  controller: titleController,
                   textCapitalization: TextCapitalization.sentences,
                   decoration: InputDecoration(
                       hintText: "Title",
@@ -173,14 +281,15 @@ class _NotePageState extends State<NotePage> {
                       color: HexColor.fromHex("#343a50"),
                       fontSize: 30,
                       fontWeight: FontWeight.bold)),
-              const TextField(
+              TextField(
+                  controller: contentController,
                   textCapitalization: TextCapitalization.sentences,
                   maxLines: null,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       hintText: "Content",
                       hintStyle: TextStyle(fontSize: 20, color: Colors.black),
                       border: InputBorder.none),
-                  style: TextStyle(fontSize: 20, color: Colors.black))
+                  style: const TextStyle(fontSize: 20, color: Colors.black))
             ],
           ),
         ));
