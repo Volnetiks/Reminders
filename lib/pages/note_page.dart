@@ -1,3 +1,4 @@
+import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/hex_color.dart';
@@ -15,6 +16,8 @@ class _NotePageState extends State<NotePage> {
 
   final titleController = TextEditingController();
   final contentController = TextEditingController();
+  final timeController = TextEditingController();
+  final dayController = TextEditingController();
 
   int indexChoosen = 0;
 
@@ -176,6 +179,8 @@ class _NotePageState extends State<NotePage> {
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(10))),
                                 child: TextField(
+                                    controller: dayController,
+                                    readOnly: true,
                                     decoration: InputDecoration(
                                         border: InputBorder.none,
                                         focusedBorder: InputBorder.none,
@@ -204,6 +209,8 @@ class _NotePageState extends State<NotePage> {
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(10))),
                                 child: TextField(
+                                    controller: timeController,
+                                    readOnly: true,
                                     decoration: InputDecoration(
                                         border: InputBorder.none,
                                         focusedBorder: InputBorder.none,
@@ -213,7 +220,20 @@ class _NotePageState extends State<NotePage> {
                                         suffixIcon: IconButton(
                                           splashColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .push(showPicker(
+                                                    context: context,
+                                                    value: TimeOfDay.now(),
+                                                    onChange: (value) => {
+                                                          setState(() {
+                                                            timeController
+                                                                    .text =
+                                                                value.format(
+                                                                    context);
+                                                          })
+                                                        }));
+                                          },
                                           icon: const Icon(Icons.access_time),
                                         ),
                                         hintText: "Time",
