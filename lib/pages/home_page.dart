@@ -4,6 +4,7 @@ import 'package:reminders/models/note.dart';
 import 'package:reminders/pages/note_page.dart';
 import 'package:reminders/utils/hex_color.dart';
 
+import '../api/notifications_api.dart';
 import '../database/notes_database.dart';
 import '../models/note_model.dart';
 
@@ -23,6 +24,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
+    NotificationsApi.init();
 
     refreshNotes();
   }

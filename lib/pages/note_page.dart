@@ -1,6 +1,7 @@
 import 'package:awesome_calendar/awesome_calendar.dart';
 import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:flutter/material.dart';
+import 'package:reminders/api/notifications_api.dart';
 import 'package:reminders/pages/home_page.dart';
 import 'package:reminders/utils/date_utils.dart';
 
@@ -126,6 +127,16 @@ class _NotePageState extends State<NotePage> {
             if (titleController.text.isNotEmpty ||
                 contentController.text.isNotEmpty) {
               if (day != null && time != null) {
+                if (notificationsEnabled) {
+                  NotificationsApi.showScheduledNotification(
+                      scheduledDate: DateTime.now().add(Duration(seconds: 25)),
+                      title: titleController.text.isEmpty
+                          ? "Reminders"
+                          : titleController.text,
+                      body: contentController.text.isEmpty
+                          ? titleController.text
+                          : contentController.text);
+                }
                 NotesDatabase.instance.createNote(Note(
                     title: titleController.text.isNotEmpty
                         ? titleController.text
