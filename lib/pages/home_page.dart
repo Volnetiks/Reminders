@@ -3,6 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:reminders/models/note.dart';
 import 'package:reminders/pages/note_page.dart';
 import 'package:reminders/utils/hex_color.dart';
+import 'dart:math' as math;
 
 import '../api/notifications_api.dart';
 import '../database/notes_database.dart';
@@ -15,15 +16,26 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   late List<Note> pinnedNotes;
   late List<Note> notes;
 
   bool isLoading = true;
+  bool toggle = false;
+
+  late AnimationController _animationController;
+  late TextEditingController _searchBarController;
 
   @override
   void initState() {
     super.initState();
+
+    _searchBarController = TextEditingController();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 375),
+    );
 
     NotificationsApi.init();
 
@@ -95,9 +107,139 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(
                           height: 35,
                         ),
-                        const Align(
-                            alignment: Alignment.topRight,
-                            child: Icon(Icons.person, size: 60)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                              height: 60.0,
+                              width: 250.0,
+                              alignment: const Alignment(-1.0, 0.0),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 375),
+                                height: 48.0,
+                                width: (!toggle) ? 48.0 : 250.0,
+                                curve: Curves.easeOut,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black26,
+                                      spreadRadius: -10.0,
+                                      blurRadius: 10.0,
+                                      offset: Offset(0.0, 10.0),
+                                    ),
+                                  ],
+                                ),
+                                child: Stack(
+                                  children: [
+                                    AnimatedPositioned(
+                                      duration:
+                                          const Duration(milliseconds: 375),
+                                      top: 6.0,
+                                      right: 7.0,
+                                      curve: Curves.easeOut,
+                                      child: AnimatedOpacity(
+                                        opacity: (!toggle) ? 0.0 : 1.0,
+                                        duration:
+                                            const Duration(milliseconds: 200),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(8.0),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xffF2F3F7),
+                                            borderRadius:
+                                                BorderRadius.circular(30.0),
+                                          ),
+                                          child: AnimatedBuilder(
+                                            builder: (context, widget) {
+                                              return Transform.rotate(
+                                                angle:
+                                                    _animationController.value *
+                                                        2.0 *
+                                                        math.pi,
+                                                child: widget,
+                                              );
+                                            },
+                                            animation: _animationController,
+                                            child: const Icon(
+                                              Icons.mic,
+                                              size: 20.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    AnimatedPositioned(
+                                      duration:
+                                          const Duration(milliseconds: 375),
+                                      left: (!toggle) ? 20.0 : 40.0,
+                                      curve: Curves.easeOut,
+                                      top: 11.0,
+                                      child: AnimatedOpacity(
+                                        opacity: (!toggle) ? 0.0 : 1.0,
+                                        duration:
+                                            const Duration(milliseconds: 200),
+                                        child: Container(
+                                          height: 23.0,
+                                          width: 180.0,
+                                          child: TextField(
+                                            controller: _searchBarController,
+                                            cursorRadius:
+                                                const Radius.circular(10.0),
+                                            cursorWidth: 2.0,
+                                            cursorColor: Colors.black,
+                                            decoration: InputDecoration(
+                                              floatingLabelBehavior:
+                                                  FloatingLabelBehavior.never,
+                                              labelText: 'Search...',
+                                              labelStyle: const TextStyle(
+                                                color: Color(0xff5B5B5B),
+                                                fontSize: 17.0,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              alignLabelWithHint: true,
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20.0),
+                                                borderSide: BorderSide.none,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Material(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(30.0),
+                                      child: IconButton(
+                                        splashRadius: 19.0,
+                                        icon:
+                                            const Icon(Icons.search, size: 18),
+                                        onPressed: () {
+                                          setState(
+                                            () {
+                                              if (!toggle) {
+                                                toggle = true;
+                                                _animationController.forward();
+                                              } else {
+                                                toggle = false;
+                                                _searchBarController.clear();
+                                                _animationController.reverse();
+                                              }
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const Align(
+                                alignment: Alignment.topRight,
+                                child: Icon(Icons.person, size: 60)),
+                          ],
+                        ),
                         Text("Reminders",
                             style: TextStyle(
                                 color: HexColor.fromHex("#343a50"),
