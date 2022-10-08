@@ -315,8 +315,8 @@ class _NotePageState extends State<NotePage> {
                                             borderRadius:
                                                 BorderRadius.circular(10)),
                                         elevation: 0,
-                                        primary: Colors.white,
-                                        onPrimary: Colors.white,
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Colors.white,
                                       ),
                                       onPressed: () {
                                         setState(() {
@@ -338,8 +338,9 @@ class _NotePageState extends State<NotePage> {
                                               borderRadius:
                                                   BorderRadius.circular(10)),
                                           elevation: 0,
-                                          primary: HexColor.fromHex("#ffa447"),
-                                          onPrimary: Colors.black),
+                                          backgroundColor:
+                                              HexColor.fromHex("#ffa447"),
+                                          foregroundColor: Colors.black),
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },

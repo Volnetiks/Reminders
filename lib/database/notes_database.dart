@@ -111,7 +111,6 @@ CREATE TABLE $notesTable (
   Future<List<Note>> readPinnedNotesWithContent(String value) async {
     final db = await instance.database;
 
-    const orderBy = '${NoteFields.dueDate} ASC';
     final result = await db.rawQuery(
         "SELECT * FROM notes WHERE isPinned = 1 AND (title LIKE '%$value%' OR content LIKE '%$value%') ORDER BY dueDate ASC");
 
