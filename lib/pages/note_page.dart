@@ -129,7 +129,8 @@ class _NotePageState extends State<NotePage> {
               if (day != null && time != null) {
                 if (notificationsEnabled) {
                   NotificationsApi.showScheduledNotification(
-                      scheduledDate: DateTime.now().add(Duration(seconds: 25)),
+                      scheduledDate: DateTime(day!.year, day!.month, day!.day,
+                          time!.hour, time!.minute),
                       title: titleController.text.isEmpty
                           ? "Reminders"
                           : titleController.text,

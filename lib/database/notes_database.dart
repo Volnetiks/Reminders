@@ -89,12 +89,31 @@ CREATE TABLE $notesTable (
     return result.map((json) => Note.fromJSON(json)).toList();
   }
 
+  Future<List<Note>> readNonPinnedNotesWithContent(String value) async {
+    final db = await instance.database;
+
+    final result = await db.rawQuery(
+        "SELECT * FROM notes WHERE isPinned = 0 AND (title LIKE '%$value%' OR content LIKE '%$value%') ORDER BY dueDate ASC");
+
+    return result.map((json) => Note.fromJSON(json)).toList();
+  }
+
   Future<List<Note>> readPinnedNotes() async {
     final db = await instance.database;
 
     const orderBy = '${NoteFields.dueDate} ASC';
     final result = await db.query(notesTable,
         orderBy: orderBy, where: '${NoteFields.isPinned} = ?', whereArgs: [1]);
+
+    return result.map((json) => Note.fromJSON(json)).toList();
+  }
+
+  Future<List<Note>> readPinnedNotesWithContent(String value) async {
+    final db = await instance.database;
+
+    const orderBy = '${NoteFields.dueDate} ASC';
+    final result = await db.rawQuery(
+        "SELECT * FROM notes WHERE isPinned = 1 AND (title LIKE '%$value%' OR content LIKE '%$value%') ORDER BY dueDate ASC");
 
     return result.map((json) => Note.fromJSON(json)).toList();
   }

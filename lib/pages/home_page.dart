@@ -51,6 +51,14 @@ class _HomePageState extends State<HomePage>
     });
   }
 
+  Future searchNotes(String value) async {
+    notes = await NotesDatabase.instance.readNonPinnedNotesWithContent(value);
+    pinnedNotes =
+        await NotesDatabase.instance.readPinnedNotesWithContent(value);
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,7 +187,7 @@ class _HomePageState extends State<HomePage>
                                         opacity: (!toggle) ? 0.0 : 1.0,
                                         duration:
                                             const Duration(milliseconds: 200),
-                                        child: Container(
+                                        child: SizedBox(
                                           height: 23.0,
                                           width: 180.0,
                                           child: TextField(
@@ -188,6 +196,9 @@ class _HomePageState extends State<HomePage>
                                                 const Radius.circular(10.0),
                                             cursorWidth: 2.0,
                                             cursorColor: Colors.black,
+                                            onChanged: ((value) {
+                                              searchNotes(value);
+                                            }),
                                             decoration: InputDecoration(
                                               floatingLabelBehavior:
                                                   FloatingLabelBehavior.never,
