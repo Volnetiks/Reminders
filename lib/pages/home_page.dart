@@ -7,6 +7,7 @@ import 'dart:math' as math;
 
 import '../api/notifications_api.dart';
 import '../database/notes_database.dart';
+import '../models/note_list_model.dart';
 import '../models/note_model.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage>
 
   bool isLoading = true;
   bool toggle = false;
+  bool masonryView = true;
 
   late AnimationController _animationController;
   late TextEditingController _searchBarController;
@@ -75,7 +77,10 @@ class _HomePageState extends State<HomePage>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          masonryView = !masonryView;
+                          setState(() {});
+                        },
                         icon: const Icon(Icons.list, size: 35)),
                     const SizedBox(height: 60.0),
                     IconButton(
@@ -247,16 +252,22 @@ class _HomePageState extends State<HomePage>
                     pinnedNotes.isEmpty
                         ? Container()
                         : SizedBox(
-                            height: 190,
-                            child: MasonryGridView.count(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 20,
-                              crossAxisSpacing: 15,
-                              itemCount: pinnedNotes.length,
-                              itemBuilder: (context, index) {
-                                return NoteWidget(note: pinnedNotes[index]);
-                              },
-                            ),
+                            height: masonryView ? 190 : 500,
+                            child: masonryView
+                                ? ListView.builder(
+                                    itemBuilder: (context, index) {
+                                    return NoteWidget(note: pinnedNotes[index]);
+                                  })
+                                : MasonryGridView.count(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 20,
+                                    crossAxisSpacing: 15,
+                                    itemCount: pinnedNotes.length,
+                                    itemBuilder: (context, index) {
+                                      return NoteWidget(
+                                          note: pinnedNotes[index]);
+                                    },
+                                  ),
                           ),
                     notes.isEmpty
                         ? Container()
@@ -267,15 +278,24 @@ class _HomePageState extends State<HomePage>
                     notes.isEmpty
                         ? Container()
                         : Expanded(
-                            child: MasonryGridView.count(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 20,
-                                crossAxisSpacing: 15,
-                                shrinkWrap: true,
-                                itemCount: notes.length,
-                                itemBuilder: (context, index) {
-                                  return NoteWidget(note: notes[index]);
-                                }),
+                            child: masonryView
+                                ? ListView.separated(
+                                    separatorBuilder: ((context, index) {
+                                      return const SizedBox(height: 10);
+                                    }),
+                                    itemCount: notes.length,
+                                    itemBuilder: (context, index) {
+                                      return NoteWidgetList(note: notes[index]);
+                                    })
+                                : MasonryGridView.count(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 20,
+                                    crossAxisSpacing: 15,
+                                    itemCount: notes.length,
+                                    itemBuilder: (context, index) {
+                                      return NoteWidget(note: notes[index]);
+                                    },
+                                  ),
                           )
                   ],
                 ),
