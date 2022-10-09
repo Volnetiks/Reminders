@@ -79,17 +79,7 @@ CREATE TABLE $notesTable (
     }
   }
 
-  Future<List<Note>> readNonPinnedNotes() async {
-    final db = await instance.database;
-
-    const orderBy = '${NoteFields.dueDate} ASC';
-    final result = await db.query(notesTable,
-        orderBy: orderBy, where: '${NoteFields.isPinned} = ?', whereArgs: [0]);
-
-    return result.map((json) => Note.fromJSON(json)).toList();
-  }
-
-  Future<List<Note>> readNonPinnedNotesWithContent(String value) async {
+  Future<List<Note>> readNonPinnedNotes(String value) async {
     final db = await instance.database;
 
     final result = await db.rawQuery(
@@ -98,17 +88,7 @@ CREATE TABLE $notesTable (
     return result.map((json) => Note.fromJSON(json)).toList();
   }
 
-  Future<List<Note>> readPinnedNotes() async {
-    final db = await instance.database;
-
-    const orderBy = '${NoteFields.dueDate} ASC';
-    final result = await db.query(notesTable,
-        orderBy: orderBy, where: '${NoteFields.isPinned} = ?', whereArgs: [1]);
-
-    return result.map((json) => Note.fromJSON(json)).toList();
-  }
-
-  Future<List<Note>> readPinnedNotesWithContent(String value) async {
+  Future<List<Note>> readPinnedNotes(String value) async {
     final db = await instance.database;
 
     final result = await db.rawQuery(

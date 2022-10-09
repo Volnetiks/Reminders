@@ -43,8 +43,8 @@ class _HomePageState extends State<HomePage>
   }
 
   Future refreshNotes() async {
-    notes = await NotesDatabase.instance.readNonPinnedNotes();
-    pinnedNotes = await NotesDatabase.instance.readPinnedNotes();
+    notes = await NotesDatabase.instance.readNonPinnedNotes("");
+    pinnedNotes = await NotesDatabase.instance.readPinnedNotes("");
 
     setState(() {
       isLoading = false;
@@ -52,9 +52,8 @@ class _HomePageState extends State<HomePage>
   }
 
   Future searchNotes(String value) async {
-    notes = await NotesDatabase.instance.readNonPinnedNotesWithContent(value);
-    pinnedNotes =
-        await NotesDatabase.instance.readPinnedNotesWithContent(value);
+    notes = await NotesDatabase.instance.readNonPinnedNotes(value);
+    pinnedNotes = await NotesDatabase.instance.readPinnedNotes(value);
 
     setState(() {});
   }
