@@ -3,6 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:reminders/models/note.dart';
 import 'package:reminders/pages/note_page.dart';
 import 'package:reminders/utils/hex_color.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math' as math;
 
 import '../api/notifications_api.dart';
@@ -25,6 +26,8 @@ class _HomePageState extends State<HomePage>
   bool isLoading = true;
   bool toggle = false;
   bool masonryView = true;
+
+  final prefs = SharedPreferences.getInstance();
 
   late AnimationController _animationController;
   late TextEditingController _searchBarController;
