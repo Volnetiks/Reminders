@@ -27,8 +27,6 @@ class _HomePageState extends State<HomePage>
   bool toggle = false;
   bool masonryView = true;
 
-  final prefs = SharedPreferences.getInstance();
-
   late AnimationController _animationController;
   late TextEditingController _searchBarController;
 
@@ -42,9 +40,25 @@ class _HomePageState extends State<HomePage>
       duration: const Duration(milliseconds: 375),
     );
 
+    loadPreferences();
+
     NotificationsApi.init();
 
     refreshNotes();
+  }
+
+  Future loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    bool? view = prefs.getBool("masonryView");
+    masonryView = view ?? true;
+    setState(() {});
+  }
+
+  Future updatePreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.setBool("masonryView", masonryView);
   }
 
   Future refreshNotes() async {
@@ -82,6 +96,7 @@ class _HomePageState extends State<HomePage>
                     IconButton(
                         onPressed: () {
                           masonryView = !masonryView;
+                          updatePreferences();
                           setState(() {});
                         },
                         icon: const Icon(Icons.list, size: 35)),
@@ -257,11 +272,7 @@ class _HomePageState extends State<HomePage>
                         : SizedBox(
                             height: masonryView ? 190 : 500,
                             child: masonryView
-                                ? ListView.builder(
-                                    itemBuilder: (context, index) {
-                                    return NoteWidget(note: pinnedNotes[index]);
-                                  })
-                                : MasonryGridView.count(
+                                ? MasonryGridView.count(
                                     crossAxisCount: 2,
                                     mainAxisSpacing: 20,
                                     crossAxisSpacing: 15,
@@ -270,7 +281,12 @@ class _HomePageState extends State<HomePage>
                                       return NoteWidget(
                                           note: pinnedNotes[index]);
                                     },
-                                  ),
+                                  )
+                                : ListView.builder(
+                                    itemBuilder: (context, index) {
+                                    return NoteWidgetList(
+                                        note: pinnedNotes[index]);
+                                  }),
                           ),
                     notes.isEmpty
                         ? Container()
@@ -282,15 +298,7 @@ class _HomePageState extends State<HomePage>
                         ? Container()
                         : Expanded(
                             child: masonryView
-                                ? ListView.separated(
-                                    separatorBuilder: ((context, index) {
-                                      return const SizedBox(height: 10);
-                                    }),
-                                    itemCount: notes.length,
-                                    itemBuilder: (context, index) {
-                                      return NoteWidgetList(note: notes[index]);
-                                    })
-                                : MasonryGridView.count(
+                                ? MasonryGridView.count(
                                     crossAxisCount: 2,
                                     mainAxisSpacing: 20,
                                     crossAxisSpacing: 15,
@@ -298,7 +306,15 @@ class _HomePageState extends State<HomePage>
                                     itemBuilder: (context, index) {
                                       return NoteWidget(note: notes[index]);
                                     },
-                                  ),
+                                  )
+                                : ListView.separated(
+                                    separatorBuilder: ((context, index) {
+                                      return const SizedBox(height: 10);
+                                    }),
+                                    itemCount: notes.length,
+                                    itemBuilder: (context, index) {
+                                      return NoteWidgetList(note: notes[index]);
+                                    }),
                           )
                   ],
                 ),
