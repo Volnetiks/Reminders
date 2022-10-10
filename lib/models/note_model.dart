@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:reminders/models/note.dart';
 import 'package:reminders/utils/date_utils.dart';
 
@@ -25,7 +26,37 @@ class _NoteWidgetState extends State<NoteWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onDoubleTap: () => {},
+      onDoubleTap: () {
+        FToast fToast = FToast();
+        fToast.init(context);
+        fToast.showToast(
+            child: Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 12.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25.0),
+                  color: Colors.greenAccent,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.check),
+                    const SizedBox(
+                      width: 12.0,
+                    ),
+                    const Text("This is a Custom Toast"),
+                    const SizedBox(width: 12),
+                    GestureDetector(
+                        onTap: () {
+                          fToast.removeCustomToast();
+                        },
+                        child: const Text("Cancel",
+                            style: TextStyle(color: Colors.red)))
+                  ],
+                )),
+            gravity: ToastGravity.BOTTOM,
+            toastDuration: const Duration(seconds: 4));
+      },
       child: Container(
           decoration: BoxDecoration(
               color: colors[widget.note.colorID],
