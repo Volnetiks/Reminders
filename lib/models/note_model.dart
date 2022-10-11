@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:reminders/database/notes_database.dart';
 import 'package:reminders/models/note.dart';
 import 'package:reminders/utils/date_utils.dart';
 
@@ -23,10 +24,22 @@ class _NoteWidgetState extends State<NoteWidget> {
     HexColor.fromHex("#ffa3a3")
   ];
 
+  bool markedDone = false;
+
+  Future updateNote() async {
+    await NotesDatabase.instance
+        .update(widget.note.copy(isDone: !widget.note.isDone));
+
+    markedDone = !markedDone;
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onDoubleTap: () {
+        updateNote();
         FToast fToast = FToast();
         fToast.init(context);
         fToast.showToast(
@@ -44,10 +57,11 @@ class _NoteWidgetState extends State<NoteWidget> {
                     const SizedBox(
                       width: 12.0,
                     ),
-                    const Text("This is a Custom Toast"),
+                    const Text("Task has been done"),
                     const SizedBox(width: 12),
                     GestureDetector(
                         onTap: () {
+                          updateNote();
                           fToast.removeCustomToast();
                         },
                         child: const Text("Cancel",
@@ -59,7 +73,8 @@ class _NoteWidgetState extends State<NoteWidget> {
       },
       child: Container(
           decoration: BoxDecoration(
-              color: colors[widget.note.colorID],
+              color:
+                  markedDone ? Colors.greenAccent : colors[widget.note.colorID],
               borderRadius: const BorderRadius.all(Radius.circular(25))),
           child: Padding(
             padding:
