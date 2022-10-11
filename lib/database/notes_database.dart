@@ -97,6 +97,14 @@ CREATE TABLE $notesTable (
     return result.map((json) => Note.fromJSON(json)).toList();
   }
 
+  Future<List<Note>> readFinishedNotes(String value) async {
+    final db = await instance.database;
+    final result = await db.rawQuery(
+        "SELECT * FROM notes WHERE (title LIKE '%$value%' OR content LIKE '%$value%') AND isDone = 1 ORDER BY dueDate ASC");
+
+    return result.map((json) => Note.fromJSON(json)).toList();
+  }
+
   Future<int> delete(int id) async {
     final db = await instance.database;
 
