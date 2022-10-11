@@ -83,7 +83,7 @@ CREATE TABLE $notesTable (
     final db = await instance.database;
 
     final result = await db.rawQuery(
-        "SELECT * FROM notes WHERE isPinned = 0 AND (title LIKE '%$value%' OR content LIKE '%$value%') ORDER BY dueDate ASC");
+        "SELECT * FROM notes WHERE isPinned = 0 AND (title LIKE '%$value%' OR content LIKE '%$value%') AND isDone = 0 ORDER BY dueDate ASC");
 
     return result.map((json) => Note.fromJSON(json)).toList();
   }
@@ -92,7 +92,7 @@ CREATE TABLE $notesTable (
     final db = await instance.database;
 
     final result = await db.rawQuery(
-        "SELECT * FROM notes WHERE isPinned = 1 AND (title LIKE '%$value%' OR content LIKE '%$value%') ORDER BY dueDate ASC");
+        "SELECT * FROM notes WHERE isPinned = 1 AND (title LIKE '%$value%' OR content LIKE '%$value%') AND isDone = 0 ORDER BY dueDate ASC");
 
     return result.map((json) => Note.fromJSON(json)).toList();
   }

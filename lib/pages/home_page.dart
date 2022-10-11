@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:reminders/models/note.dart';
 import 'package:reminders/pages/note_page.dart';
+import 'package:reminders/pages/validated_task_page.dart';
 import 'package:reminders/utils/hex_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math' as math;
@@ -102,8 +103,13 @@ class _HomePageState extends State<HomePage>
                         icon: const Icon(Icons.list, size: 35)),
                     const SizedBox(height: 60.0),
                     IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.search, size: 35)),
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return const ValidatedTasksPage();
+                          }));
+                        },
+                        icon: const Icon(Icons.check_rounded, size: 35)),
                   ],
                 ),
               )),
