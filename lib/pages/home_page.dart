@@ -5,7 +5,6 @@ import 'package:reminders/pages/note_page.dart';
 import 'package:reminders/pages/validated_task_page.dart';
 import 'package:reminders/utils/hex_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math' as math;
 
 import '../api/notifications_api.dart';
 import '../database/notes_database.dart';
