@@ -237,7 +237,19 @@ class _HomePageState extends State<HomePage> {
                                     crossAxisSpacing: 15,
                                     itemCount: notes.length,
                                     itemBuilder: (context, index) {
-                                      return NoteWidget(note: notes[index]);
+                                      return Dismissible(
+                                          key: ValueKey<int>(notes[index].id!),
+                                          background: Container(
+                                              color: Colors.green,
+                                              child: const Icon(Icons.check)),
+                                          onDismissed: ((direction) {
+                                            setState(() {
+                                              notes.removeAt(index);
+                                            });
+                                          }),
+                                          child: NoteWidget(
+                                            note: notes[index],
+                                          ));
                                     },
                                   )
                                 : ListView.separated(

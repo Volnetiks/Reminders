@@ -58,8 +58,8 @@ class _NoteWidgetListState extends State<NoteWidgetList> {
                       width: 12.0,
                     ),
                     Text(widget.note.isDone
-                        ? "Task has been marked as unfinished"
-                        : "Task has been marked as completed"),
+                        ? "Task is now unfinished"
+                        : "Task is now completed"),
                     const SizedBox(width: 12),
                     GestureDetector(
                         onTap: () {
