@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:reminders/models/note.dart';
 import 'package:reminders/pages/note_page.dart';
 import 'package:reminders/pages/validated_task_page.dart';
@@ -68,6 +69,53 @@ class _HomePageState extends State<HomePage> {
     pinnedNotes = await NotesDatabase.instance.readPinnedNotes(value);
 
     setState(() {});
+  }
+
+  Future cancelComplete(Note note) async {
+    await NotesDatabase.instance.update(note.copy(isDone: note.isDone));
+    searchNotes(_searchBarController.text);
+  }
+
+  Future completeNote(int index, List<Note> notes) async {
+    Note note = notes[index];
+    await NotesDatabase.instance.update(note.copy(isDone: !note.isDone));
+    setState(() {
+      notes.removeAt(index);
+    });
+    FToast fToast = FToast();
+    // ignore: use_build_context_synchronously
+    fToast.init(context);
+    fToast.showToast(
+        child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25.0),
+              color: Colors.greenAccent,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.check),
+                const SizedBox(
+                  width: 12.0,
+                ),
+                Text(note.isDone
+                    ? "Task is now unfinished"
+                    : "Task is now complete"),
+                const SizedBox(width: 12),
+                GestureDetector(
+                    onTap: () {
+                      cancelComplete(note);
+                      fToast.removeCustomToast();
+                    },
+                    child: const Text("Cancel",
+                        style: TextStyle(color: Colors.red)))
+              ],
+            )),
+        gravity: ToastGravity.BOTTOM,
+        toastDuration: const Duration(seconds: 2));
+    searchNotes(_searchBarController.text);
   }
 
   @override
@@ -211,8 +259,26 @@ class _HomePageState extends State<HomePage> {
                                     crossAxisSpacing: 15,
                                     itemCount: pinnedNotes.length,
                                     itemBuilder: (context, index) {
-                                      return NoteWidget(
-                                          note: pinnedNotes[index]);
+                                      return Dismissible(
+                                          key: ValueKey<int>(
+                                              pinnedNotes[index].id!),
+                                          onDismissed: ((direction) {
+                                            completeNote(index, pinnedNotes);
+                                          }),
+                                          background: Container(
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.lightGreen,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(25))),
+                                              child: const Icon(
+                                                  Icons.check_rounded)),
+                                          direction: index.isEven
+                                              ? DismissDirection.endToStart
+                                              : DismissDirection.startToEnd,
+                                          child: NoteWidget(
+                                            note: pinnedNotes[index],
+                                          ));
                                     },
                                   )
                                 : ListView.builder(
@@ -240,12 +306,14 @@ class _HomePageState extends State<HomePage> {
                                       return Dismissible(
                                           key: ValueKey<int>(notes[index].id!),
                                           onDismissed: ((direction) {
-                                            setState(() {
-                                              notes.removeAt(index);
-                                            });
+                                            completeNote(index, notes);
                                           }),
                                           background: Container(
-                                              color: Colors.green,
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.lightGreen,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(25))),
                                               child: const Icon(
                                                   Icons.check_rounded)),
                                           direction: index.isEven
