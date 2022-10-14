@@ -102,6 +102,35 @@ class _ValidatedTasksPageState extends State<ValidatedTasksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: Opacity(
+          opacity: 0.95,
+          child: BottomAppBar(
+              color: Colors.white,
+              elevation: 0.1,
+              notchMargin: 10,
+              shape: const CircularNotchedRectangle(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          masonryView = !masonryView;
+                          updatePreferences();
+                          setState(() {});
+                        },
+                        icon: const Icon(Icons.list, size: 35)),
+                    const SizedBox(height: 60.0),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(Icons.close_rounded, size: 35)),
+                  ],
+                ),
+              )),
+        ),
         extendBody: true,
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
