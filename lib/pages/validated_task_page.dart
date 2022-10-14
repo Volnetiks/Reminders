@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:reminders/models/note.dart';
 import 'package:reminders/utils/hex_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,6 +64,39 @@ class _ValidatedTasksPageState extends State<ValidatedTasksPage> {
     notes = await NotesDatabase.instance.readFinishedNotes(value);
 
     setState(() {});
+  }
+
+  Future updateNotes(int index, List<Note> notes) async {
+    Note note = notes[index];
+    await NotesDatabase.instance.update(note.copy(isDone: false));
+    setState(() {
+      notes.removeAt(index);
+    });
+    FToast fToast = FToast();
+    // ignore: use_build_context_synchronously
+    fToast.init(context);
+    fToast.showToast(
+        child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25.0),
+              color: Colors.greenAccent,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Icon(Icons.check),
+                SizedBox(
+                  width: 12.0,
+                ),
+                Text("Task is now available again."),
+                SizedBox(width: 12),
+              ],
+            )),
+        gravity: ToastGravity.BOTTOM,
+        toastDuration: const Duration(seconds: 2));
+    searchNotes(_searchBarController.text);
   }
 
   @override
@@ -148,7 +182,7 @@ class _ValidatedTasksPageState extends State<ValidatedTasksPage> {
                     const SizedBox(height: 15),
                     notes.isEmpty
                         ? Container()
-                        : Text("Upcoming",
+                        : Text("Completed Tasks",
                             style: TextStyle(
                                 color: HexColor.fromHex("#bdbfc3"),
                                 fontSize: 15)),
@@ -162,7 +196,24 @@ class _ValidatedTasksPageState extends State<ValidatedTasksPage> {
                                     crossAxisSpacing: 15,
                                     itemCount: notes.length,
                                     itemBuilder: (context, index) {
-                                      return NoteWidget(note: notes[index]);
+                                      return Dismissible(
+                                          key: ValueKey<int>(notes[index].id!),
+                                          background: Container(
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.lightGreen,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(25))),
+                                              child: const Icon(
+                                                  Icons.close_rounded)),
+                                          direction: index.isEven
+                                              ? DismissDirection.endToStart
+                                              : DismissDirection.startToEnd,
+                                          onDismissed: (direction) {
+                                            updateNotes(index, notes);
+                                          },
+                                          child:
+                                              NoteWidget(note: notes[index]));
                                     },
                                   )
                                 : ListView.separated(
@@ -171,7 +222,23 @@ class _ValidatedTasksPageState extends State<ValidatedTasksPage> {
                                     }),
                                     itemCount: notes.length,
                                     itemBuilder: (context, index) {
-                                      return NoteWidgetList(note: notes[index]);
+                                      return Dismissible(
+                                          key: ValueKey<int>(notes[index].id!),
+                                          background: Container(
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.lightGreen,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(25))),
+                                              child: const Icon(
+                                                  Icons.close_rounded)),
+                                          direction:
+                                              DismissDirection.horizontal,
+                                          onDismissed: (direction) {
+                                            updateNotes(index, notes);
+                                          },
+                                          child: NoteWidgetList(
+                                              note: notes[index]));
                                     }),
                           )
                   ],
