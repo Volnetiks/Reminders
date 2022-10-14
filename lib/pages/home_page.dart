@@ -118,6 +118,13 @@ class _HomePageState extends State<HomePage> {
     searchNotes(_searchBarController.text);
   }
 
+  Future launchValidatedPage() async {
+    await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return const ValidatedTasksPage();
+    }));
+    searchNotes(_searchBarController.text);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,10 +151,7 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 60.0),
                     IconButton(
                         onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return const ValidatedTasksPage();
-                          }));
+                          launchValidatedPage();
                         },
                         icon: const Icon(Icons.check_rounded, size: 35)),
                   ],
