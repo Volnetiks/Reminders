@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:reminders/database/notes_database.dart';
 import 'package:reminders/models/note.dart';
 import 'package:reminders/utils/date_utils.dart';
@@ -24,60 +23,13 @@ class _NoteWidgetState extends State<NoteWidget> {
     HexColor.fromHex("#ffa3a3")
   ];
 
-  bool markedDone = false;
-
-  Future updateNote() async {
-    await NotesDatabase.instance
-        .update(widget.note.copy(isDone: !widget.note.isDone));
-
-    markedDone = !markedDone;
-
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onDoubleTap: () {
-        updateNote();
-        FToast fToast = FToast();
-        fToast.init(context);
-        fToast.showToast(
-            child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0, vertical: 12.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25.0),
-                  color: Colors.greenAccent,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.check),
-                    const SizedBox(
-                      width: 12.0,
-                    ),
-                    Text(widget.note.isDone
-                        ? "Task is now unfinished"
-                        : "Task is now complete"),
-                    const SizedBox(width: 12),
-                    GestureDetector(
-                        onTap: () {
-                          updateNote();
-                          fToast.removeCustomToast();
-                        },
-                        child: const Text("Cancel",
-                            style: TextStyle(color: Colors.red)))
-                  ],
-                )),
-            gravity: ToastGravity.BOTTOM,
-            toastDuration: const Duration(seconds: 4));
-      },
       child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-              color:
-                  markedDone ? Colors.greenAccent : colors[widget.note.colorID],
+              color: colors[widget.note.colorID],
               borderRadius: const BorderRadius.all(Radius.circular(25))),
           child: Padding(
             padding:
