@@ -74,6 +74,7 @@ class _NoteWidgetState extends State<NoteWidget> {
             toastDuration: const Duration(seconds: 4));
       },
       child: Container(
+          width: double.infinity,
           decoration: BoxDecoration(
               color:
                   markedDone ? Colors.greenAccent : colors[widget.note.colorID],

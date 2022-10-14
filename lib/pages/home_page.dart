@@ -239,14 +239,18 @@ class _HomePageState extends State<HomePage> {
                                     itemBuilder: (context, index) {
                                       return Dismissible(
                                           key: ValueKey<int>(notes[index].id!),
-                                          background: Container(
-                                              color: Colors.green,
-                                              child: const Icon(Icons.check)),
                                           onDismissed: ((direction) {
                                             setState(() {
                                               notes.removeAt(index);
                                             });
                                           }),
+                                          background: Container(
+                                              color: Colors.green,
+                                              child: const Icon(
+                                                  Icons.check_rounded)),
+                                          direction: index.isEven
+                                              ? DismissDirection.endToStart
+                                              : DismissDirection.startToEnd,
                                           child: NoteWidget(
                                             note: notes[index],
                                           ));
