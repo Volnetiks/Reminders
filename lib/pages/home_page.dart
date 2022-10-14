@@ -283,8 +283,23 @@ class _HomePageState extends State<HomePage> {
                                   )
                                 : ListView.builder(
                                     itemBuilder: (context, index) {
-                                    return NoteWidgetList(
-                                        note: pinnedNotes[index]);
+                                    return Dismissible(
+                                      key:
+                                          ValueKey<int>(pinnedNotes[index].id!),
+                                      background: Container(
+                                          decoration: const BoxDecoration(
+                                              color: Colors.lightGreen,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(25))),
+                                          child:
+                                              const Icon(Icons.check_rounded)),
+                                      direction: DismissDirection.horizontal,
+                                      onDismissed: ((direction) {
+                                        completeNote(index, pinnedNotes);
+                                      }),
+                                      child: NoteWidgetList(
+                                          note: pinnedNotes[index]),
+                                    );
                                   }),
                           ),
                     notes.isEmpty
@@ -330,7 +345,23 @@ class _HomePageState extends State<HomePage> {
                                     }),
                                     itemCount: notes.length,
                                     itemBuilder: (context, index) {
-                                      return NoteWidgetList(note: notes[index]);
+                                      return Dismissible(
+                                          key: ValueKey<int>(notes[index].id!),
+                                          background: Container(
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.lightGreen,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(25))),
+                                              child: const Icon(
+                                                  Icons.check_rounded)),
+                                          direction:
+                                              DismissDirection.horizontal,
+                                          onDismissed: ((direction) {
+                                            completeNote(index, notes);
+                                          }),
+                                          child: NoteWidgetList(
+                                              note: notes[index]));
                                     }),
                           )
                   ],
