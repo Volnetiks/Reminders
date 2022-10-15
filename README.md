@@ -1,16 +1,14 @@
-# reminders
+[![Codemagic build status](https://api.codemagic.io/apps/634ad974816f0c9006d1caa8/634ad974816f0c9006d1caa7/status_badge.svg)](https://codemagic.io/apps/634ad974816f0c9006d1caa8/634ad974816f0c9006d1caa7/latest_build)
 
-A new Flutter project.
+# Reminders
 
-## Getting Started
+An new reminders app designed with ease of usage and a modern UI in mind.
 
-This project is a starting point for a Flutter application.
+## Issues
+If you are encountering issues during the use of the app, please don't mind creating an issue concerning it.
 
-A few resources to get you started if this is your first Flutter project:
+## Contributing
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This project is based on [Flutter](https://flutter.dev/?gclid=CjwKCAjwtKmaBhBMEiwAyINuwMPL1llwN3096eZAYyHzNqj1XvJe3RfUGvUkrKR9jNKzU_t7xCJPCxoCzagQAvD_BwE&gclsrc=aw.ds).
+If you are familiar with it, simply fork and clone the project, and create a merge request once your feature is done.
+Otherwise, you should take a first look at how flutter works.
