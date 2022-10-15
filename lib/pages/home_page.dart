@@ -122,6 +122,7 @@ class _HomePageState extends State<HomePage> {
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return const ValidatedTasksPage();
     }));
+    loadPreferences();
     searchNotes(_searchBarController.text);
   }
 
