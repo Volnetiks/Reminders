@@ -1,5 +1,6 @@
 import 'package:awesome_calendar/awesome_calendar.dart';
 import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
+import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:flutter/material.dart';
 import 'package:reminders/api/notifications_api.dart';
 import 'package:reminders/pages/home_page.dart';
@@ -285,7 +286,7 @@ class _NotePageState extends State<NotePage> {
                                             Navigator.of(context)
                                                 .push(showPicker(
                                                     context: context,
-                                                    value: TimeOfDay.now(),
+                                                    value: Time(hour: DateTime.now().hour, minute: DateTime.now().minute),
                                                     onChange: (value) => {
                                                           setState(() {
                                                             timeController

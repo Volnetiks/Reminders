@@ -17,11 +17,9 @@ class NotificationsApi {
 
   static Future init({bool initScheduled = false}) async {
     const settings = InitializationSettings(
-        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-        iOS: IOSInitializationSettings());
+        android: AndroidInitializationSettings('@mipmap/ic_launcher'));
 
-    await notifications.initialize(settings,
-        onSelectNotification: (payload) async {});
+    await notifications.initialize(settings);
   }
 
   static void showScheduledNotification(
@@ -38,7 +36,6 @@ class NotificationsApi {
             body,
             tz.TZDateTime.from(scheduledDate, tz.local),
             await notificationsDetails(),
-            androidAllowWhileIdle: true,
             uiLocalNotificationDateInterpretation:
                 UILocalNotificationDateInterpretation.absoluteTime)
       };

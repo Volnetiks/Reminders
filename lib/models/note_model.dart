@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:reminders/database/notes_database.dart';
 import 'package:reminders/models/note.dart';
 import 'package:reminders/utils/date_utils.dart';
 
